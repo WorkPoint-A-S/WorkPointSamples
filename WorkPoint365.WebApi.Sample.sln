@@ -1,15 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkPoint365.WebApi.Sample", "WorkPoint365.WebApi.Sample\WorkPoint365.WebApi.Sample.csproj", "{AA425880-B5C7-46F8-A1F9-BB63A587DD00}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{AB127E32-00C5-465B-8C7D-52A9BC99101D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkPoint365.WebApi.Sample.dotnetcore", "WorkPoint365.WebApi.Sample.dotnetcore\WorkPoint365.WebApi.Sample.dotnetcore.csproj", "{533DFD82-6054-41A1-A659-8033A9B511ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{C03FEDC9-01FB-4F00-9DEF-035CF3A06B9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{86CAF74A-4966-493E-BF09-2BC6F0021ED3}"
 	ProjectSection(SolutionItems) = preProject
-		Dll\WorkPoint.Integration.Common.dll = Dll\WorkPoint.Integration.Common.dll
-		Dll\WorkPoint365.WebAPI.Model.dll = Dll\WorkPoint365.WebAPI.Model.dll
-		Dll\WorkPoint365.WebAPI.Proxy.dll = Dll\WorkPoint365.WebAPI.Proxy.dll
+		Assemblies\net45\WorkPoint365.WebAPI.Model.dll = Assemblies\net45\WorkPoint365.WebAPI.Model.dll
+		Assemblies\net45\WorkPoint365.WebAPI.Proxy.dll = Assemblies\net45\WorkPoint365.WebAPI.Proxy.dll
+		Assemblies\net45\WorkPoint365.WebAPI.Proxy.Methods.dll = Assemblies\net45\WorkPoint365.WebAPI.Proxy.Methods.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netstandard2.1", "netstandard2.1", "{5762B6F1-D0E9-4CD5-84AA-C5D1B45C405F}"
+	ProjectSection(SolutionItems) = preProject
+		Assemblies\netstandard2.1\WorkPoint365.WebAPI.Model.dll = Assemblies\netstandard2.1\WorkPoint365.WebAPI.Model.dll
+		Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.Methods.dll = Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.Methods.dll
+		Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.NETStandard.dll = Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.NETStandard.dll
 	EndProjectSection
 EndProject
 Global
@@ -22,8 +33,19 @@ Global
 		{AA425880-B5C7-46F8-A1F9-BB63A587DD00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA425880-B5C7-46F8-A1F9-BB63A587DD00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA425880-B5C7-46F8-A1F9-BB63A587DD00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{533DFD82-6054-41A1-A659-8033A9B511ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{533DFD82-6054-41A1-A659-8033A9B511ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{533DFD82-6054-41A1-A659-8033A9B511ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{533DFD82-6054-41A1-A659-8033A9B511ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{86CAF74A-4966-493E-BF09-2BC6F0021ED3} = {C03FEDC9-01FB-4F00-9DEF-035CF3A06B9C}
+		{5762B6F1-D0E9-4CD5-84AA-C5D1B45C405F} = {C03FEDC9-01FB-4F00-9DEF-035CF3A06B9C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {375589A2-D0A5-4797-A9D7-BCCAE90E8F75}
 	EndGlobalSection
 EndGlobal
