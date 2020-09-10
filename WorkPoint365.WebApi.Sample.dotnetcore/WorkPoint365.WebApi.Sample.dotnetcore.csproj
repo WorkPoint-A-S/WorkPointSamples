@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.19.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WorkPoint365.WebAPI.Model">
+      <HintPath>..\Assemblies\netstandard2.1\WorkPoint365.WebAPI.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="WorkPoint365.WebAPI.Proxy.Methods">
+      <HintPath>..\Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.Methods.dll</HintPath>
+    </Reference>
+    <Reference Include="WorkPoint365.WebAPI.Proxy.NETStandard">
+      <HintPath>..\Assemblies\netstandard2.1\WorkPoint365.WebAPI.Proxy.NETStandard.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
