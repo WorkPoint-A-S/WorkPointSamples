@@ -30,7 +30,7 @@ namespace WorkPoint365.WebApi.Sample.dotnetcore
 
         private static async Task<BusinessModuleOnline[]> GetBusinessModules()
         {
-            WorkPointAPI workPointAPI = new WorkPointAPI(WorkPointAPI.Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            WorkPointAPI workPointAPI = new WorkPointAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
             var value = await workPointAPI.GetBusinessModules();
 
             return value;
@@ -41,7 +41,7 @@ namespace WorkPoint365.WebApi.Sample.dotnetcore
             List<FieldValue> fieldValues = new List<FieldValue>();
             fieldValues.Add(new FieldValue("Title", "My Company Title"));
 
-            ListItemAPI listItemAPI = new ListItemAPI(WorkPointAPI.Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
             listItemAPI.TimeOutInMilliseconds = 1000 * 60 * 5; // 5 minutes
             int value = await listItemAPI.Create(bmName, fieldValues.ToArray(), true);
 
@@ -50,7 +50,7 @@ namespace WorkPoint365.WebApi.Sample.dotnetcore
 
         private static async Task<ListItem> GetListItem(Guid bmId, int itemId)
         {
-            ListItemAPI listItemAPI = new ListItemAPI(WorkPointAPI.Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
             var value = await listItemAPI.GetListItem(bmId, itemId);
 
             return value;
