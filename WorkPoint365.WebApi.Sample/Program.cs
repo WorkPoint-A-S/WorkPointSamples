@@ -63,5 +63,39 @@ namespace WorkPoint365.WebApi.Sample
 
 			return value; 
 		}
+
+        private static async Task<Guid?> QueueMasterSiteSyncJobForEntities(Guid bmId, QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum synchronizationScope, string camlQuery = null, Guid? viewId = null)
+		{
+            var queueMSSyncModel = new QueueMasterSiteEntitySynchronizationModel();
+
+            queueMSSyncModel.ListScopes = new List<ListScope> { new ListScope("Documents") };
+            queueMSSyncModel.SetWelcomePage = true;
+            queueMSSyncModel.SyncWebParts = true;
+            queueMSSyncModel.SyncFeatures = true;
+            queueMSSyncModel.SyncNavigation = true;
+            queueMSSyncModel.SyncNintexWorkflows = false;
+            queueMSSyncModel.SyncNintexWorkflowsDeleteFromTargetSite = false;
+            queueMSSyncModel.SyncTeamSettings = false;
+            queueMSSyncModel.DeleteAddTeamTabs = false;
+            queueMSSyncModel.SyncDefaultSiteCollectionSettings = true;
+            queueMSSyncModel.SyncSiteColumns = true;
+            queueMSSyncModel.SyncSiteContentTypes = true;
+            queueMSSyncModel.SyncLanguageResources = true;
+            queueMSSyncModel.SyncSiteCollectionTermSets = true;
+            queueMSSyncModel.SyncSiteCollectionFeatures = true;
+            queueMSSyncModel.SyncSiteCollectionApps = false;
+            
+            queueMSSyncModel.SynchronizationScope = synchronizationScope;
+            
+            if (synchronizationScope == QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum.CAML)
+                queueMSSyncModel.CamlQuery = camlQuery;
+            else if (synchronizationScope == QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum.View)
+                queueMSSyncModel.ViewId = viewId;         
+
+            WorkPointAPI workpointAPI = new WorkPointAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+			var value = await workpointAPI.QueueMasterSiteSyncJobForEntities(bmId, queueMSSyncModel);
+
+			return value; 
+		}
     }
 }
