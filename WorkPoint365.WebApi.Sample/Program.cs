@@ -48,7 +48,6 @@ namespace WorkPoint365.WebApi.Sample
             return value;
         }
 
-
         private static async Task<ListItem> GetListItem(Guid bmId, int itemId)
         {
             ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
@@ -56,5 +55,13 @@ namespace WorkPoint365.WebApi.Sample
 
             return value;
         }
+
+		private static async Task<Guid?> QueueAggregationJobForEntity(Guid bmId, int itemId)
+		{
+			ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+			var value = await listItemAPI.QueueAggregationJobForEntity(bmId, itemId);
+
+			return value; 
+		}
     }
 }
