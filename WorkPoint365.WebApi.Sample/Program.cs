@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WorkPoint365.WebAPI.Model;
 using WorkPoint365.WebAPI.Model.SharePoint;
@@ -15,8 +17,13 @@ namespace WorkPoint365.WebApi.Sample
         public static string WorkPointUrl = System.Configuration.ConfigurationManager.AppSettings["WorkPointUrl"];
         public static string TenantID = System.Configuration.ConfigurationManager.AppSettings["TenantID"];
 
+        private static IHttpClientFactory _httpClientFactory;
+
         static async Task Main(string[] args)
         {
+            var serviceProvider = new ServiceCollection().AddHttpClient().BuildServiceProvider();
+            _httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+
             int id = await CreateListItemWithSite("Companies");
 
             var businessModules = await GetBusinessModules();
@@ -26,11 +33,13 @@ namespace WorkPoint365.WebApi.Sample
             ListItem listItem = await GetListItem(companyModule.Id, id);
 
             string siteRelativeUrl = listItem.FieldValues.First(fv => fv.InternalFieldName == "wpSite").TextValue;
+
+            await QueueMasterSiteSyncJobForEntities(companyModule.Id, SynchronizationScopeEnum.BufferSites, workPointJobQueue: "Integration");
         }
 
         private static async Task<BusinessModuleOnline[]> GetBusinessModules()
         {
-            WorkPointAPI workPointAPI = new WorkPointAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            WorkPointAPI workPointAPI = new WorkPointAPI(_httpClientFactory, Mode.Production, TenantID, WorkPointUrl, ClientID, ClientSecret);
             var value = await workPointAPI.GetBusinessModules();
 
             return value;
@@ -41,7 +50,7 @@ namespace WorkPoint365.WebApi.Sample
             List<FieldValue> fieldValues = new List<FieldValue>();
             fieldValues.Add(new FieldValue("Title", "My Company Title"));
 
-            ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            ListItemAPI listItemAPI = new ListItemAPI(_httpClientFactory, Mode.Production, TenantID, WorkPointUrl, ClientID, ClientSecret);
             listItemAPI.TimeOutInMilliseconds = 1000 * 60 * 5; // 5 minutes
             int value = await listItemAPI.Create(bmName, fieldValues.ToArray(), true);
 
@@ -50,7 +59,7 @@ namespace WorkPoint365.WebApi.Sample
 
         private static async Task<ListItem> GetListItem(Guid bmId, int itemId)
         {
-            ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            ListItemAPI listItemAPI = new ListItemAPI(_httpClientFactory, Mode.Production, TenantID, WorkPointUrl, ClientID, ClientSecret);
             var value = await listItemAPI.GetListItem(bmId, itemId);
 
             return value;
@@ -58,13 +67,13 @@ namespace WorkPoint365.WebApi.Sample
 
 		private static async Task<Guid?> QueueAggregationJobForEntity(Guid bmId, int itemId)
 		{
-			ListItemAPI listItemAPI = new ListItemAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
+			ListItemAPI listItemAPI = new ListItemAPI(_httpClientFactory, Mode.Production, TenantID, WorkPointUrl, ClientID, ClientSecret);
 			var value = await listItemAPI.QueueAggregationJobForEntity(bmId, itemId);
 
 			return value; 
 		}
 
-        private static async Task<Guid?> QueueMasterSiteSyncJobForEntities(Guid bmId, QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum synchronizationScope, string camlQuery = null, Guid? viewId = null)
+        private static async Task<Guid?> QueueMasterSiteSyncJobForEntities(Guid bmId, SynchronizationScopeEnum synchronizationScope, string camlQuery = null, Guid? viewId = null, string workPointJobQueue = null)
 		{
             var queueMSSyncModel = new QueueMasterSiteEntitySynchronizationModel();
 
@@ -87,14 +96,16 @@ namespace WorkPoint365.WebApi.Sample
             
             queueMSSyncModel.SynchronizationScope = synchronizationScope;
             
-            if (synchronizationScope == QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum.CAML)
+            if (synchronizationScope == SynchronizationScopeEnum.CAML)
                 queueMSSyncModel.CamlQuery = camlQuery;
-            else if (synchronizationScope == QueueMasterSiteEntitySynchronizationModel.SynchronizationScopeEnum.View)
+            else if (synchronizationScope == SynchronizationScopeEnum.View)
                 queueMSSyncModel.ViewId = viewId;         
 
-            WorkPointAPI workpointAPI = new WorkPointAPI(Mode.Integration, TenantID, WorkPointUrl, ClientID, ClientSecret);
-			var value = await workpointAPI.QueueMasterSiteSyncJobForEntities(bmId, queueMSSyncModel);
-
+            WorkPointAPI workpointAPI = new WorkPointAPI(_httpClientFactory, Mode.Production, TenantID, WorkPointUrl, ClientID, ClientSecret);
+            if (workPointJobQueue != null)
+                workpointAPI.WorkPointJobQueue = workPointJobQueue; 
+            
+            var value = await workpointAPI.QueueMasterSiteSyncJobForEntities(bmId, queueMSSyncModel);
 			return value; 
 		}
     }
