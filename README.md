@@ -16,11 +16,11 @@ https://login.microsoftonline.com/{tenant}/adminconsent?client_id={clientId}&red
 More information on the OAuth 2.0 client credentials flow in Azure AD:	 
 https://docs.microsoft.com/da-dk/azure/active-directory/develop/active-directory-v2-protocols-oauth-client-creds
 
-Before you get started, a tenant administrator have to sign up to the WorkPoint 365 WebAPI:
-https://wp365integration.azurewebsites.net
+Before you get started, a tenant administrator must have consented to the WorkPoint 365 App:
+https://install.workpoint365.com
 
 More information about the WorkPoint API, you can find here>
-https://wp365integration.azurewebsites.net/help
+https://api.workpoint365.com
 
 When you have signed up to the WebAPI you can go on and create a new daemon app in your Azure AD.
 
